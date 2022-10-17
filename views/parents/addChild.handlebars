@@ -1,0 +1,140 @@
+<div class="container d-flex flex-column">
+    <div class="row align-items-center justify-content-center g-0 min-vh-100">
+        <div class="col-lg-5 col-md-8 py-8 py-xl-0">
+            <div class="card shadow">
+                <div class="card-body p-6">
+
+                    <div class="mb-4">
+                        <h1 class="mb-1 fw-bold">Add Child</h1>
+                    </div>
+
+                    <form
+                        action="/users/signup"
+                        id="signup-form"
+                        class="needs-validation"
+                        novalidate
+                    >
+
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">Child
+                                First Name<span
+                                    class="mandatory"
+                                >*</span></label>
+                            <input
+                                type="text"
+                                id="firstName"
+                                class="form-control"
+                                name="firstName"
+                                placeholder="Enter child first name here"
+                                required="required"
+                                autocomplete="off"
+                            />
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                First name is mandatory.
+                            </div>
+                            <div class="invalid-feedback">
+                                First name should have only alphabetical
+                                characters and/or spaces.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Child Last
+                                Name<span class="mandatory">*</span></label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                class="form-control"
+                                name="lastName"
+                                placeholder="Enter child last name here"
+                                required="required"
+                                autocomplete="off"
+                            />
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Last name is mandatory.
+                            </div>
+                            <div class="invalid-feedback">
+                                Last name should have only alphabetical
+                                characters and/or spaces.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Child Email<span
+                                    class="mandatory"
+                                >*</span></label>
+                            <input
+                                type="email"
+                                id="email"
+                                class="form-control"
+                                name="email"
+                                placeholder="Enter child email address here"
+                                required="required"
+                                autocomplete="off"
+                            />
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Email is mandatory and it should be in valid
+                                format.
+                            </div>
+                        </div>
+
+                        <label for="password" class="form-label">Child Password<span
+                                class="mandatory"
+                            >*</span></label>
+                        <div class="mb-3 input-group">
+                            <input
+                                type="password"
+                                id="password"
+                                class="form-control"
+                                name="password"
+                                placeholder="********"
+                                required="required"
+                                autocomplete="off"
+                            />
+                            <button
+                                class="btn btn-outline-secondary show-password"
+                                type="button"
+                            >Show</button>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Password is mandatory.
+                            </div>
+                            <div class="invalid-feedback">
+                                Password should be of at least 8 characters
+                                long.
+                            </div>
+                            <div class="invalid-feedback">
+                                Password should have only alphanumeric or
+                                special characters and no spaces.
+                            </div>
+                        </div>
+
+                        <p class="text-danger d-none" id="error-message"></p>
+
+                        <div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    Create Child Account
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

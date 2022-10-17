@@ -1,0 +1,10 @@
+<div class="jumbotron case-options-wrapper text-center">
+    <h1 class="my-5">Email Verification</h1>
+    {{#if isError}}
+        <img src="../../public/images/cross-mark.png" height="150" />
+        <h2 class="text-danger">{{error}}</h2>
+    {{else}}
+        <img src="../../public/images/check-mark.png" height="150" />
+        <h2 class="text-success">Congratulations! your email has been verified</h2>
+    {{/if}}
+</div>

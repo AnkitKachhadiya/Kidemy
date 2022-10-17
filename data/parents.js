@@ -191,6 +191,21 @@ async function checkParent(_email, _password) {
   }
 }
 
+const throwError = (code = 500, message = "Error: Internal Server Error") => {
+  throw { code, message };
+};
+
+const throwCatchError = (error) => {
+  if (error.code && error.message) {
+      throwError(error.code, error.message);
+  }
+
+  throwError(
+      ErrorCode.INTERNAL_SERVER_ERROR,
+      "Error: Internal server error."
+  );
+};
+
 module.exports = {
   create,
   get,

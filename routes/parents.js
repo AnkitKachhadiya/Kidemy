@@ -181,6 +181,70 @@ router.post("/sendVerificationEmail", async (request, response) => {
   }
 });
 
+router.get("/dashboard", async (request, response) => {
+  if (!request.session.parent) {
+      return response.redirect("/");
+  }
+
+  const parent = await parentsData.get(request.session.parent._id);
+
+  response.render("parents/dashboard", {
+      pageTitle: "Dashboard",
+      parentEmail: parent.email,
+      isVerified: parent.isVerified,
+      children: parent.children,
+  });
+});
+
+router.get(
+  "/verifyEmail/:parentId&:verificationToken",
+  async (request, response) => {
+      try {
+          const parentId = validator.isParentIdValid(
+              xss(request.params.parentId)
+          );
+          const verificationToken = validator.isVerificationTokenValid(
+              xss(request.params.verificationToken)
+          );
+
+          const verification = await parentsData.verifyEmail(
+              parentId,
+              verificationToken
+          );
+
+          if (!verification.parentVerified) {
+              throwError(
+                  ErrorCode.INTERNAL_SERVER_ERROR,
+                  "Internal Server Error"
+              );
+          }
+
+          response.render("parents/email-verification", {
+              pageTitle: "Email Verification",
+              isError: false,
+          });
+      } catch (error) {
+          response
+              .status(error.code || ErrorCode.INTERNAL_SERVER_ERROR)
+              .render("parents/email-verification", {
+                  pageTitle: "Email Verification",
+                  isError: true,
+                  error: error.message || "Internal Server Error",
+              });
+      }
+  }
+);
+
+router.get("/addChild", async (request, response) => {
+  if (!request.session.parent) {
+      return response.redirect("/");
+  }
+
+  response.render("parents/addChild", {
+      pageTitle: "Add Child",
+  });
+});
+
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
   throw { code, message };
 };

@@ -1,0 +1,20 @@
+<div class="jumbotron case-options-wrapper">
+    <div class="container text-center">
+        <img src="../../public/images/warning.png" height="150" class="mb-5" />
+        <p>Oops! It seems like you have not verified your account. Start using
+            Kidemy by verifying your account.</p>
+        <p>
+            <button class="btn btn-primary" id="send-verification-email">Send
+                Verification Email</button>
+        </p>
+        <div
+            class="alert alert-success mt-3 d-none"
+            role="alert"
+            id="success-alert"
+        >
+            Verification email has been sent to your registered email
+            <strong>{{parentEmail}}</strong>
+        </div>
+        <p class="text-danger d-none" id="error-message"></p>
+    </div>
+</div>

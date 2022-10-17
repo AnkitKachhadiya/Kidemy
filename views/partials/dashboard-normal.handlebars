@@ -1,0 +1,98 @@
+{{#if children.length}}
+    <div class="my-5">
+        <div class="d-flex flex-row justify-content-center">
+            <div class="card text-center mx-2" style="width: 15rem;">
+                <img
+                    src="../../public/images/child.png"
+                    class="card-img-top"
+                    width="100"
+                />
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>First Name:</strong>
+                        John</li>
+                    <li class="list-group-item"><strong>Last Name:</strong>
+                        Doe</li>
+                    <li class="list-group-item"><strong>Email:</strong>
+                        john@doe.com</li>
+                    <li class="list-group-item"><strong>Courses Assigned:</strong>
+                        5</li>
+                    <li class="list-group-item"><strong>Courses Completed:</strong>
+                        3</li>
+                    <li class="list-group-item"><strong>Courses Ongoing:</strong>
+                        2</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary">View Progress</a>
+                </div>
+            </div>
+            <div class="card text-center mx-2" style="width: 15rem;">
+                <img
+                    src="../../public/images/child.png"
+                    class="card-img-top"
+                    width="100"
+                />
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>First Name:</strong>
+                        John</li>
+                    <li class="list-group-item"><strong>Last Name:</strong>
+                        Doe</li>
+                    <li class="list-group-item"><strong>Email:</strong>
+                        john@doe.com</li>
+                    <li class="list-group-item"><strong>Courses Assigned:</strong>
+                        5</li>
+                    <li class="list-group-item"><strong>Courses Completed:</strong>
+                        3</li>
+                    <li class="list-group-item"><strong>Courses Ongoing:</strong>
+                        2</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary">View Progress</a>
+                </div>
+            </div>
+            <div class="card text-center mx-2" style="width: 15rem;">
+                <img
+                    src="../../public/images/child.png"
+                    class="card-img-top"
+                    width="100"
+                />
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>First Name:</strong>
+                        John</li>
+                    <li class="list-group-item"><strong>Last Name:</strong>
+                        Doe</li>
+                    <li class="list-group-item"><strong>Email:</strong>
+                        john@doe.com</li>
+                    <li class="list-group-item"><strong>Courses Assigned:</strong>
+                        5</li>
+                    <li class="list-group-item"><strong>Courses Completed:</strong>
+                        3</li>
+                    <li class="list-group-item"><strong>Courses Ongoing:</strong>
+                        2</li>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary">View Progress</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <div class="my-5">
+        <div class="d-flex flex-row justify-content-center">
+            <div class="card text-center" style="width: 15rem;">
+                <img
+                    src="../../public/images/children.png"
+                    class="card-img-top"
+                    width="100"
+                />
+                <div class="card-body">
+                    <p class="card-text">You haven't added any child. Please add
+                        a child to start learning.</p>
+                </div>
+                <div class="card-body">
+                    <a href="/parents/addChild" class="btn btn-primary">Add
+                        Child</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}

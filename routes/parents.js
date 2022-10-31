@@ -313,6 +313,105 @@ router.post("/addChild", async (request, response) => {
     }
 });
 
+//profile page
+router.get("/profile", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const parent = await parentsData.get(request.session.parent._id);
+
+        response.render("parents/profile", {
+            pageTitle: "Profile",
+            parent: parent,
+        });
+    } catch (error) {
+        response
+            .status(error.code || ErrorCode.INTERNAL_SERVER_ERROR)
+            .render("parents/profile", {
+                pageTitle: "Profile",
+                error: error.message || "Internal Server Error",
+            });
+    }
+});
+
+//update profile page view
+router.get("/update-profile", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const parent = await parentsData.get(request.session.parent._id);
+
+        response.render("parents/update-profile", {
+            pageTitle: "Update Profile",
+            parent: parent,
+        });
+    } catch (error) {
+        response
+            .status(error.code || ErrorCode.INTERNAL_SERVER_ERROR)
+            .render("parents/update-profile", {
+                pageTitle: "Update profile",
+                error: error.message || "Internal Server Error",
+            });
+    }
+});
+
+//submit update profile page
+router.put("/profile", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const requestPostData = request.body;
+
+        const firstName = validator.isFirstNameValid(
+            xss(requestPostData.firstName)
+        );
+        const lastName = validator.isLastNameValid(
+            xss(requestPostData.lastName)
+        );
+
+        const parentDetails = request.session.parent;
+
+        if (
+            firstName === parentDetails.firstName &&
+            lastName === parentDetails.lastName
+        ) {
+            throwError(
+                ErrorCode.BAD_REQUEST,
+                "No fields have been changed from their original values, so no update has occurred!"
+            );
+        }
+
+        const parent = await parentsData.updateProfile(
+            request.session.parent._id,
+            firstName,
+            lastName
+        );
+
+        request.session.parent.firstName = firstName;
+        request.session.parent.lastName = lastName;
+
+        if (!parent.profileUpdated) {
+            throwError(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                "Internal Server Error"
+            );
+        }
+
+        response.json({ isError: false });
+    } catch (error) {
+        response.status(error.code || ErrorCode.INTERNAL_SERVER_ERROR).json({
+            isError: true,
+            error: error.message || "Internal server error",
+        });
+    }
+});
+
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
     throw { code, message };
 };

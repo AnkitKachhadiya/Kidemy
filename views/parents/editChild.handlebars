@@ -1,0 +1,115 @@
+<div class="container d-flex flex-column">
+    <div class="row align-items-center justify-content-center g-0 min-vh-100">
+        <div class="col-lg-5 col-md-8 py-8 py-xl-0">
+            <div class="card shadow">
+                <div class="card-body p-6">
+
+                    <div class="mb-4">
+                        <h1 class="mb-1 fw-bold">Edit Child Account</h1>
+                    </div>
+
+                    <form
+                        action="/parents/editChild"
+                        id="edit-child-form"
+                        class="needs-validation"
+                        method="post"
+                        novalidate
+                    >
+
+                        <div class="mb-3">
+                            <label for="childEmail" class="form-label">Child
+                                Email<span class="mandatory">*</span></label>
+                            <input
+                                type="email"
+                                id="childEmail"
+                                class="form-control"
+                                name="childEmail"
+                                placeholder="Enter child email address here"
+                                required="required"
+                                autocomplete="off"
+                                value="{{child.email}}"
+                                disabled="disabled"
+                            />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="childFirstName" class="form-label">Child
+                                First Name<span
+                                    class="mandatory"
+                                >*</span></label>
+                            <input
+                                type="text"
+                                id="childFirstName"
+                                class="form-control"
+                                name="childFirstName"
+                                placeholder="Enter child first name here"
+                                required="required"
+                                autocomplete="off"
+                                value="{{child.firstName}}"
+                            />
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Child first name is mandatory.
+                            </div>
+                            <div class="invalid-feedback">
+                                Child first name should have only alphabetical
+                                characters and/or spaces.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="childLastName" class="form-label">Child
+                                Last Name<span
+                                    class="mandatory"
+                                >*</span></label>
+                            <input
+                                type="text"
+                                id="childLastName"
+                                class="form-control"
+                                name="childLastName"
+                                placeholder="Enter child last name here"
+                                required="required"
+                                autocomplete="off"
+                                value="{{child.lastName}}"
+                            />
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Child last name is mandatory.
+                            </div>
+                            <div class="invalid-feedback">
+                                Child last name should have only alphabetical
+                                characters and/or spaces.
+                            </div>
+                        </div>
+
+                        <input
+                            type="hidden"
+                            value="{{child.childId}}"
+                            id="childId"
+                        />
+
+                        <p class="text-danger d-none" id="error-message"></p>
+
+                        <div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+<script src="/public/js/parents.js"></script>

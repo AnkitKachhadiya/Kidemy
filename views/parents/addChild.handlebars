@@ -5,26 +5,27 @@
                 <div class="card-body p-6">
 
                     <div class="mb-4">
-                        <h1 class="mb-1 fw-bold">Add Child</h1>
+                        <h1 class="mb-1 fw-bold">Create Child Account</h1>
                     </div>
 
                     <form
-                        action="/users/signup"
-                        id="signup-form"
+                        action="/parents/addChild"
+                        id="add-child-form"
                         class="needs-validation"
+                        method="post"
                         novalidate
                     >
 
                         <div class="mb-3">
-                            <label for="firstName" class="form-label">Child
+                            <label for="childFirstName" class="form-label">Child
                                 First Name<span
                                     class="mandatory"
                                 >*</span></label>
                             <input
                                 type="text"
-                                id="firstName"
+                                id="childFirstName"
                                 class="form-control"
-                                name="firstName"
+                                name="childFirstName"
                                 placeholder="Enter child first name here"
                                 required="required"
                                 autocomplete="off"
@@ -33,22 +34,24 @@
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
-                                First name is mandatory.
+                                Child first name is mandatory.
                             </div>
                             <div class="invalid-feedback">
-                                First name should have only alphabetical
+                                Child first name should have only alphabetical
                                 characters and/or spaces.
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="lastName" class="form-label">Child Last
-                                Name<span class="mandatory">*</span></label>
+                            <label for="childLastName" class="form-label">Child
+                                Last Name<span
+                                    class="mandatory"
+                                >*</span></label>
                             <input
                                 type="text"
-                                id="lastName"
+                                id="childLastName"
                                 class="form-control"
-                                name="lastName"
+                                name="childLastName"
                                 placeholder="Enter child last name here"
                                 required="required"
                                 autocomplete="off"
@@ -57,23 +60,22 @@
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
-                                Last name is mandatory.
+                                Child last name is mandatory.
                             </div>
                             <div class="invalid-feedback">
-                                Last name should have only alphabetical
+                                Child last name should have only alphabetical
                                 characters and/or spaces.
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Child Email<span
-                                    class="mandatory"
-                                >*</span></label>
+                            <label for="childEmail" class="form-label">Child
+                                Email<span class="mandatory">*</span></label>
                             <input
                                 type="email"
-                                id="email"
+                                id="childEmail"
                                 class="form-control"
-                                name="email"
+                                name="childEmail"
                                 placeholder="Enter child email address here"
                                 required="required"
                                 autocomplete="off"
@@ -82,20 +84,19 @@
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
-                                Email is mandatory and it should be in valid
-                                format.
+                                Child email is mandatory and it should be in
+                                valid format.
                             </div>
                         </div>
 
-                        <label for="password" class="form-label">Child Password<span
-                                class="mandatory"
-                            >*</span></label>
+                        <label for="childPassword" class="form-label">Child
+                            Password<span class="mandatory">*</span></label>
                         <div class="mb-3 input-group">
                             <input
                                 type="password"
-                                id="password"
+                                id="childPassword"
                                 class="form-control"
-                                name="password"
+                                name="childPassword"
                                 placeholder="********"
                                 required="required"
                                 autocomplete="off"
@@ -108,14 +109,14 @@
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
-                                Password is mandatory.
+                                Child password is mandatory.
                             </div>
                             <div class="invalid-feedback">
-                                Password should be of at least 8 characters
-                                long.
+                                Child password should be of at least 8
+                                characters long.
                             </div>
                             <div class="invalid-feedback">
-                                Password should have only alphanumeric or
+                                Child password should have only alphanumeric or
                                 special characters and no spaces.
                             </div>
                         </div>
@@ -125,7 +126,7 @@
                         <div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">
-                                    Create Child Account
+                                    Submit
                                 </button>
                             </div>
                         </div>
@@ -138,3 +139,6 @@
         </div>
     </div>
 </div>
+
+<script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+<script src="/public/js/parents.js"></script>

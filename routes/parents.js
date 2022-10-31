@@ -28,56 +28,6 @@ router.get("/", async (request, response) => {
     });
 });
 
-//login submit
-router.post("/login", async (request, response) => {
-    if (request.session.parent) {
-        return response.redirect("/");
-    }
-
-    try {
-        const requestPostData = request.body;
-
-        validator.isLoginTotalFieldsValid(Object.keys(requestPostData).length);
-
-        const email = validator.isEmailValid(xss(requestPostData.email));
-        const password = validator.isPasswordValid(
-            xss(requestPostData.password)
-        );
-
-        const parent = await parentsData.checkParent(email, password);
-
-        if (!parent) {
-            throwError(
-                ErrorCode.INTERNAL_SERVER_ERROR,
-                "Internal Server Error"
-            );
-        }
-
-        request.session.parent = parent;
-
-        request.app.locals.isParentAuthenticated = true;
-
-        response.json({ isError: false });
-    } catch (error) {
-        response.status(error.code || ErrorCode.INTERNAL_SERVER_ERROR).json({
-            isError: true,
-            error: error.message || "Error: Internal server error.",
-        });
-    }
-});
-
-//logout
-router.get("/logout", async (request, response) => {
-    const parent = request.session.parent;
-
-    if (parent) {
-        request.session.destroy();
-        request.app.locals.isParentAuthenticated = false;
-    }
-
-    response.redirect("/parents");
-});
-
 //signup form
 router.get("/signup", async (request, response) => {
     if (request.session.parent) {
@@ -135,6 +85,122 @@ router.post("/signup", async (request, response) => {
         });
     }
 });
+
+//login submit
+router.post("/login", async (request, response) => {
+    if (request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const requestPostData = request.body;
+
+        validator.isLoginTotalFieldsValid(Object.keys(requestPostData).length);
+
+        const email = validator.isEmailValid(xss(requestPostData.email));
+        const password = validator.isPasswordValid(
+            xss(requestPostData.password)
+        );
+
+        const parent = await parentsData.checkParent(email, password);
+
+        if (!parent) {
+            throwError(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                "Internal Server Error"
+            );
+        }
+
+        request.session.parent = parent;
+
+        request.app.locals.isParentAuthenticated = true;
+
+        response.json({ isError: false });
+    } catch (error) {
+        response.status(error.code || ErrorCode.INTERNAL_SERVER_ERROR).json({
+            isError: true,
+            error: error.message || "Error: Internal server error.",
+        });
+    }
+});
+
+//logout
+router.get("/logout", async (request, response) => {
+    const parent = request.session.parent;
+
+    if (parent) {
+        request.session.destroy();
+        request.app.locals.isParentAuthenticated = false;
+    }
+
+    response.redirect("/parents");
+});
+
+//dashboard view
+router.get("/dashboard", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    const parent = await parentsData.get(request.session.parent._id);
+
+    const addChildFlashMessage = request.app.locals.addChildFlashMessage;
+    const editChildFlashMessage = request.app.locals.editChildFlashMessage;
+    const editChildError = request.app.locals.editChildError;
+
+    request.app.locals.addChildFlashMessage = undefined;
+    request.app.locals.editChildFlashMessage = undefined;
+    request.app.locals.editChildError = undefined;
+
+    response.render("parents/dashboard", {
+        pageTitle: "Dashboard",
+        parentEmail: parent.email,
+        isVerified: parent.isVerified,
+        children: parent.children,
+        addChildFlashMessage: addChildFlashMessage,
+        editChildFlashMessage: editChildFlashMessage,
+        editChildError: editChildError,
+    });
+});
+
+router.get(
+    "/verifyEmail/:parentId&:verificationToken",
+    async (request, response) => {
+        try {
+            const parentId = validator.isParentIdValid(
+                xss(request.params.parentId)
+            );
+            const verificationToken = validator.isVerificationTokenValid(
+                xss(request.params.verificationToken)
+            );
+
+            const verification = await parentsData.verifyEmail(
+                parentId,
+                verificationToken
+            );
+
+            if (!verification.parentVerified) {
+                throwError(
+                    ErrorCode.INTERNAL_SERVER_ERROR,
+                    "Internal Server Error"
+                );
+            }
+
+            response.render("parents/email-verification", {
+                pageTitle: "Email Verification",
+                isError: false,
+            });
+        } catch (error) {
+            response
+                .status(error.code || ErrorCode.INTERNAL_SERVER_ERROR)
+                .render("parents/email-verification", {
+                    pageTitle: "Email Verification",
+                    isError: true,
+                    error: error.message || "Internal Server Error",
+                });
+        }
+    }
+);
 
 //sending verification email
 router.post("/sendVerificationEmail", async (request, response) => {
@@ -195,60 +261,6 @@ router.post("/sendVerificationEmail", async (request, response) => {
         });
     }
 });
-
-router.get("/dashboard", async (request, response) => {
-    if (!request.session.parent) {
-        return response.redirect("/");
-    }
-
-    const parent = await parentsData.get(request.session.parent._id);
-
-    response.render("parents/dashboard", {
-        pageTitle: "Dashboard",
-        parentEmail: parent.email,
-        isVerified: parent.isVerified,
-        children: parent.children,
-    });
-});
-
-router.get(
-    "/verifyEmail/:parentId&:verificationToken",
-    async (request, response) => {
-        try {
-            const parentId = validator.isParentIdValid(
-                xss(request.params.parentId)
-            );
-            const verificationToken = validator.isVerificationTokenValid(
-                xss(request.params.verificationToken)
-            );
-
-            const verification = await parentsData.verifyEmail(
-                parentId,
-                verificationToken
-            );
-
-            if (!verification.parentVerified) {
-                throwError(
-                    ErrorCode.INTERNAL_SERVER_ERROR,
-                    "Internal Server Error"
-                );
-            }
-
-            response.render("parents/email-verification", {
-                pageTitle: "Email Verification",
-                isError: false,
-            });
-        } catch (error) {
-            response
-                .status(error.code || ErrorCode.INTERNAL_SERVER_ERROR)
-                .render("parents/email-verification", {
-                    pageTitle: "Email Verification",
-                    isError: true,
-                    error: error.message || "Internal Server Error",
-                });
-        }
-    }
-);
 
 router.get("/addChild", async (request, response) => {
     if (!request.session.parent) {
@@ -408,6 +420,99 @@ router.put("/profile", async (request, response) => {
         response.status(error.code || ErrorCode.INTERNAL_SERVER_ERROR).json({
             isError: true,
             error: error.message || "Internal server error",
+        });
+    }
+});
+
+router.get("/editChild/:childId", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const childId = validator.isChildIdValid(xss(request.params.childId));
+
+        const child = await parentsData.getChild(
+            request.session.parent._id,
+            childId
+        );
+
+        if (!child) {
+            request.app.locals.editChildError = "Child not found.";
+            return response.redirect("/parents/dashboard");
+        }
+
+        response.render("parents/editChild", {
+            pageTitle: "Edit Child",
+            child: {
+                email: child.email,
+                firstName: child.firstName,
+                lastName: child.lastName,
+                childId: childId,
+            },
+        });
+    } catch (error) {
+        request.app.locals.editChildError =
+            error.message || "Internal server error";
+
+        return response.redirect("/parents/dashboard");
+    }
+});
+
+router.post("/editChild", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const requestPostData = request.body;
+
+        const firstName = validator.isFirstNameValid(
+            xss(requestPostData.firstName)
+        );
+        const lastName = validator.isLastNameValid(
+            xss(requestPostData.lastName)
+        );
+        const childId = validator.isChildIdValid(xss(requestPostData.childId));
+
+        const child = await parentsData.getChild(
+            request.session.parent._id,
+            childId
+        );
+
+        if (!child) {
+            throwError(ErrorCode.NOT_FOUND, "Child not found.");
+        }
+
+        if (firstName === child.firstName && lastName === child.lastName) {
+            throwError(
+                ErrorCode.BAD_REQUEST,
+                "No fields have been changed from their original values, so no update has occurred!"
+            );
+        }
+
+        const currentChild = await parentsData.updateChild(
+            request.session.parent._id,
+            childId,
+            firstName,
+            lastName
+        );
+
+        if (!currentChild.profileUpdated) {
+            throwError(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                "Internal Server Error"
+            );
+        }
+
+        request.app.locals.editChildFlashMessage =
+            "Child account updated successfully.";
+
+        response.json({ isError: false });
+    } catch (error) {
+        response.status(error.code || ErrorCode.INTERNAL_SERVER_ERROR).json({
+            isError: true,
+            error: error.message || "Error: Internal server error.",
         });
     }
 });

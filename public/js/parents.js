@@ -267,54 +267,40 @@
 
         const firstName = $("#first-name");
         const lastName = $("#last-name");
-        const dateOfBirth = $("#date-of-birth");
-        const gender = $("#gender");
 
-        const user = {
+        const parent = {
             firstName: firstName.val().trim(),
             lastName: lastName.val().trim(),
-            dateOfBirth: dateOfBirth.val().trim(),
-            gender: gender.val().trim(),
         };
 
         $("input").removeClass("is-invalid is-valid");
 
-        validUserIdentity(user.firstName)
+        validUserIdentity(parent.firstName)
             ? firstName.addClass("is-valid")
             : firstName.addClass("is-invalid");
 
-        validUserIdentity(user.lastName)
+        validUserIdentity(parent.lastName)
             ? lastName.addClass("is-valid")
             : lastName.addClass("is-invalid");
-
-        validDateOfBirth(user.dateOfBirth)
-            ? dateOfBirth.addClass("is-valid")
-            : dateOfBirth.addClass("is-invalid");
-
-        validGender(user.gender)
-            ? gender.addClass("is-valid")
-            : gender.addClass("is-invalid");
 
         if (hasErrors) {
             return;
         }
 
-        user.dateOfBirth = moment(user.dateOfBirth).format("MM/DD/YYYY");
-
-        submitUpdateProfileForm(user);
+        submitUpdateProfileForm(parent);
     });
 
-    function submitUpdateProfileForm(user) {
+    function submitUpdateProfileForm(parent) {
         $.ajax({
             url: "/parents/profile",
             method: "PUT",
             contentType: "application/json",
-            data: JSON.stringify(user),
+            data: JSON.stringify(parent),
             beforeSend: function () {
                 $("#loader-container").removeClass("d-none");
             },
             success: function () {
-                window.location.href = "/users/profile";
+                window.location.href = "/parents/profile";
             },
             complete: function () {
                 $("#loader-container").addClass("d-none");
@@ -349,4 +335,126 @@
             },
         });
     });
+
+    $(document).on("submit", "form#add-child-form", function (event) {
+        event.preventDefault();
+
+        hasErrors = false;
+
+        $("#error-message").addClass("d-none");
+
+        const childFirstName = $("#childFirstName");
+        const childLastName = $("#childLastName");
+        const childEmail = $("#childEmail");
+        const childPassword = $("#childPassword");
+
+        const child = {
+            firstName: childFirstName.val().trim(),
+            lastName: childLastName.val().trim(),
+            email: childEmail.val().trim(),
+            password: childPassword.val(),
+        };
+
+        $("input").removeClass("is-invalid is-valid");
+
+        validUserIdentity(child.firstName)
+            ? childFirstName.addClass("is-valid")
+            : childFirstName.addClass("is-invalid");
+
+        validUserIdentity(child.lastName)
+            ? childLastName.addClass("is-valid")
+            : childLastName.addClass("is-invalid");
+
+        validEmail(child.email)
+            ? childEmail.addClass("is-valid")
+            : childEmail.addClass("is-invalid");
+
+        validPassword(child.password)
+            ? childPassword.addClass("is-valid")
+            : childPassword.addClass("is-invalid");
+
+        if (hasErrors) {
+            return;
+        }
+
+        submitAddChildForm(child);
+    });
+
+    function submitAddChildForm(child) {
+        $.ajax({
+            url: "/parents/addChild",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(child),
+            beforeSend: function () {
+                $("#loader-container").removeClass("d-none");
+            },
+            success: function () {
+                window.location.href = "/parents/dashboard";
+            },
+            complete: function () {
+                $("#loader-container").addClass("d-none");
+            },
+            error: function (data) {
+                $("#error-message").html(data.responseJSON.error);
+                $("#error-message").removeClass("d-none");
+            },
+        });
+    }
+
+    $(document).on("submit", "form#edit-child-form", function (event) {
+        event.preventDefault();
+
+        hasErrors = false;
+
+        $("#error-message").addClass("d-none");
+
+        const childFirstName = $("#childFirstName");
+        const childLastName = $("#childLastName");
+        const childId = $("#childId");
+
+        const child = {
+            childId: childId.val().trim(),
+            firstName: childFirstName.val().trim(),
+            lastName: childLastName.val().trim(),
+        };
+
+        $("input").removeClass("is-invalid is-valid");
+
+        validUserIdentity(child.firstName)
+            ? childFirstName.addClass("is-valid")
+            : childFirstName.addClass("is-invalid");
+
+        validUserIdentity(child.lastName)
+            ? childLastName.addClass("is-valid")
+            : childLastName.addClass("is-invalid");
+
+        if (hasErrors) {
+            return;
+        }
+
+        submitEditChildForm(child);
+    });
+
+    function submitEditChildForm(child) {
+        $.ajax({
+            url: "/parents/editChild",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(child),
+            beforeSend: function () {
+                $("#loader-container").removeClass("d-none");
+            },
+            success: function () {
+                window.location.href = "/parents/dashboard";
+            },
+            complete: function () {
+                $("#loader-container").addClass("d-none");
+            },
+            error: function (data) {
+                $("#error-message").html(data.responseJSON.error);
+                $("#error-message").removeClass("d-none");
+            },
+        });
+    }
 })(jQuery);

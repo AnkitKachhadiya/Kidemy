@@ -113,6 +113,17 @@ function isParentIdValid(_parentId) {
     return parentId;
 }
 
+function isChildIdValid(_childId) {
+    common.isArgumentString(_childId, "child id");
+    common.isStringEmpty(_childId, "child id");
+
+    const childId = _childId.trim();
+
+    common.isUuid(childId);
+
+    return childId;
+}
+
 function isVerificationTokenValid(_verificationToken) {
     common.isArgumentString(_verificationToken, "verification token");
     common.isStringEmpty(_verificationToken, "verification token");
@@ -140,4 +151,5 @@ module.exports = {
     isPasswordValid,
     isParentIdValid,
     isVerificationTokenValid,
+    isChildIdValid,
 };

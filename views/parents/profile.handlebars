@@ -1,0 +1,31 @@
+<div class="container d-flex flex-column">
+    <div class="row align-items-center justify-content-center g-0 min-vh-100">
+        <div class="col-lg-5 col-md-8 py-8 py-xl-0">
+            <div class="card shadow">
+                <div class="card-body p-6">
+                    <div class="mb-4">
+                        <h1 class="mb-1 fw-bold">Parent Profile</h1>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p class="card-text"><strong>First Name:
+                                </strong>{{parent.firstName}}
+                            </p>
+                            <p class="card-text"><strong>Last Name:
+                                </strong>{{parent.lastName}}</p>
+                            <p class="card-text">
+                                <strong>Email: </strong>
+                                {{parent.email}}
+                            </p>
+                            <p class="text-center"><a
+                                    href="/parents/update-profile"
+                                    class="badge bg-primary text-decoration-none hover-color-none"
+                                >Edit Profile</a></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

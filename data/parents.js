@@ -203,6 +203,61 @@ async function checkParent(_email, _password) {
     }
 }
 
+async function addChild(_parentId, _firstName, _lastName, _email, _password) {
+    try {
+        const parentId = validator.isParentIdValid(xss(_parentId));
+        const firstName = validator.isFirstNameValid(xss(_firstName));
+        const lastName = validator.isLastNameValid(xss(_lastName));
+        const email = validator.isEmailValid(xss(_email));
+        const password = validator.isPasswordValid(xss(_password));
+
+        const parentsCollection = await parents();
+
+        const user = await parentsCollection.findOne({
+            $or: [
+                { email: email },
+                {
+                    "children.email": email,
+                },
+            ],
+        });
+
+        if (user) {
+            throwError(
+                ErrorCode.BAD_REQUEST,
+                "Error: Already registered with given email id."
+            );
+        }
+
+        const passwordHash = await bcryptjs.hash(password, SALT_ROUNDS);
+
+        const newChild = {
+            _id: uuid.v4(),
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: passwordHash,
+            courses: [],
+        };
+
+        const updatedInfo = await parentsCollection.updateOne(
+            { _id: parentId },
+            { $push: { children: newChild } }
+        );
+
+        if (updatedInfo.modifiedCount !== 1) {
+            throwError(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                "Error: Could not create child account."
+            );
+        }
+
+        return { accountCreated: true };
+    } catch (error) {
+        throwCatchError(error);
+    }
+}
+
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
     throw { code, message };
 };

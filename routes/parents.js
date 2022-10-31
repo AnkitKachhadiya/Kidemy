@@ -260,6 +260,59 @@ router.get("/addChild", async (request, response) => {
     });
 });
 
+router.post("/addChild", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/");
+    }
+
+    try {
+        const requestPostData = request.body;
+
+        const firstName = validator.isFirstNameValid(
+            xss(requestPostData.firstName)
+        );
+        const lastName = validator.isLastNameValid(
+            xss(requestPostData.lastName)
+        );
+        const email = validator.isEmailValid(xss(requestPostData.email));
+        const password = validator.isPasswordValid(
+            xss(requestPostData.password)
+        );
+
+        const child = await parentsData.addChild(
+            request.session.parent._id,
+            firstName,
+            lastName,
+            email,
+            password
+        );
+
+        if (!child) {
+            throwError(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                "Internal Server Error"
+            );
+        }
+
+        request.app.locals.addChildFlashMessage =
+            "Child account created successfully.";
+
+        if (!child.accountCreated) {
+            throwError(
+                ErrorCode.INTERNAL_SERVER_ERROR,
+                "Internal Server Error"
+            );
+        }
+
+        response.json({ isError: false });
+    } catch (error) {
+        response.status(error.code || ErrorCode.INTERNAL_SERVER_ERROR).json({
+            isError: true,
+            error: error.message || "Error: Internal server error.",
+        });
+    }
+});
+
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
     throw { code, message };
 };

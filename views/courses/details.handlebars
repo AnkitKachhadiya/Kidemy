@@ -1,0 +1,78 @@
+<div class="container my-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8">
+                    <input
+                        type="hidden"
+                        id="course-id"
+                        value="{{course._id}}"
+                    />
+                    <h1>{{course.name}}</h1>
+                    <p>{{course.description}}</p>
+                    <p>
+                        Total Modules:
+                        {{courseAnalytics.totalModules}}
+                        <br />
+                        Total Video Lessons:
+                        {{courseAnalytics.totalVideos}}
+                        <br />
+                        Total Quizzes:
+                        {{courseAnalytics.totalQuizzes}}
+                    </p>
+                </div>
+                <div class="col-4">
+                    <img
+                        width="380"
+                        height="225"
+                        src="{{course.imageUrl}}"
+                        alt="course"
+                    />
+                </div>
+            </div>
+            <!-- Button trigger modal -->
+            <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                id="assign-course"
+            >
+                Assign Course
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="assign-course-modal" class="modal hide fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Assign Child</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body" id="assign-course-modal-body">
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >Close</button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="assign-child"
+                >Assign</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/courses.js"></script>

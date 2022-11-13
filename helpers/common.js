@@ -26,7 +26,6 @@ function isStringEmpty(string, variableName) {
 }
 
 function isStringAlphaSpace(string, variableName) {
-    //should match alphabetical characters and spaces
     const alphaSpaceRegex = /[^a-zA-Z ]/;
 
     if (alphaSpaceRegex.test(string)) {

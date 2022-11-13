@@ -15,8 +15,7 @@ test("Create account invalid first name: Just space", () => {
         parents.create("  ", "shah", "demo@de.com", "12345678")
     ).rejects.toEqual({
         code: 400,
-        message:
-            "Error: Empty string passed for First Name.",
+        message: "Error: Empty string passed for First Name.",
     });
 });
 
@@ -45,8 +44,7 @@ test("Create account invalid last name: Just space", async () => {
         parents.create("john", "   ", "demo@de.com", "12345678")
     ).rejects.toEqual({
         code: 400,
-        message:
-            "Error: Empty string passed for Last Name.",
+        message: "Error: Empty string passed for Last Name.",
     });
 });
 
@@ -102,8 +100,7 @@ test("Create account invalid password: Just space", () => {
         parents.create("john", "doe", "demo@de.com", "    ")
     ).rejects.toEqual({
         code: 400,
-        message:
-            "Error: Empty string passed for password.",
+        message: "Error: Empty string passed for password.",
     });
 });
 
@@ -112,8 +109,7 @@ test("Create account invalid password: Number", () => {
         parents.create("john", "doe", "demo@de.com", 1236)
     ).rejects.toEqual({
         code: 400,
-        message:
-            "Error: Password should be of at least 8 characters long.",
+        message: "Error: Password should be of at least 8 characters long.",
     });
 });
 
@@ -124,9 +120,7 @@ test("Create account invalid number of arguments", () => {
     });
 });
 
-
 // ===================================== PARENT GET =====================================================================
-
 
 test("Get parent account invalid id", () => {
     return expect(parents.get("1241-2414153-")).rejects.toEqual({
@@ -164,7 +158,7 @@ test("Get parent account invalid id: Numbers", () => {
 });
 
 test("Get parent account invalid id: Object", () => {
-    return expect(parents.get({"id":"esrydj34y354ygr"})).rejects.toEqual({
+    return expect(parents.get({ id: "esrydj34y354ygr" })).rejects.toEqual({
         code: 400,
         message: "Error: Invalid id.",
     });
@@ -189,18 +183,14 @@ test("Check parent credentials for login invalid email", () => {
 });
 
 test("Create account invalid email: Just space", () => {
-    return expect(
-        parents.checkParent("  ", "1234556677")
-    ).rejects.toEqual({
+    return expect(parents.checkParent("  ", "1234556677")).rejects.toEqual({
         code: 400,
         message: "Error: Empty string passed for email.",
     });
 });
 
 test("Create account invalid email: Number", () => {
-    return expect(
-        parents.checkParent(12345, "1234556677")
-    ).rejects.toEqual({
+    return expect(parents.checkParent(12345, "1234556677")).rejects.toEqual({
         code: 400,
         message: "Error: Email not valid.",
     });
@@ -217,65 +207,82 @@ test("Check parent credentials for login invalid password", () => {
 });
 
 test("Check parent credentials for login invalid password: Number", () => {
-    return expect(
-        parents.checkParent("demo@demo.com", 12312)
-    ).rejects.toEqual({
+    return expect(parents.checkParent("demo@demo.com", 12312)).rejects.toEqual({
         code: 400,
-        message:
-            "Error: Password should be of at least 8 characters long.",
+        message: "Error: Password should be of at least 8 characters long.",
     });
 });
 
 test("Check parent credentials for login invalid password: Just Space", () => {
-    return expect(
-        parents.checkParent("demo@demo.com", "  ")
-    ).rejects.toEqual({
+    return expect(parents.checkParent("demo@demo.com", "  ")).rejects.toEqual({
         code: 400,
-        message:
-            "Error: Empty string passed for password.",
+        message: "Error: Empty string passed for password.",
     });
 });
 
 //================================================ Add Child =================================================
 
-
 test("Get parent account invalid id", () => {
-    return expect(parents.addChild("1241-2414153-","john", "shahvre", "demo@de.com", "12345678")).rejects.toEqual({
+    return expect(
+        parents.addChild(
+            "1241-2414153-",
+            "john",
+            "shahvre",
+            "demo@de.com",
+            "12345678"
+        )
+    ).rejects.toEqual({
         code: 400,
         message: "Error: Invalid id.",
     });
 });
 
 test("Get parent account invalid input type", () => {
-    return expect(parents.addChild([],"john", "shahvre", "demo@de.com", "12345678")).rejects.toEqual({
+    return expect(
+        parents.addChild([], "john", "shahvre", "demo@de.com", "12345678")
+    ).rejects.toEqual({
         code: 400,
         message: "Error: Empty string passed for parent id.",
     });
 });
 
 test("Get parent account invalid input type: Only space", () => {
-    return expect(parents.addChild("      ","john", "shahvre", "demo@de.com", "12345678")).rejects.toEqual({
+    return expect(
+        parents.addChild("      ", "john", "shahvre", "demo@de.com", "12345678")
+    ).rejects.toEqual({
         code: 400,
         message: "Error: Empty string passed for parent id.",
     });
 });
 
 test("Get parent account invalid id: Special character", () => {
-    return expect(parents.addChild("$%^&^%","john", "shahvre", "demo@de.com", "12345678")).rejects.toEqual({
+    return expect(
+        parents.addChild("$%^&^%", "john", "shahvre", "demo@de.com", "12345678")
+    ).rejects.toEqual({
         code: 400,
         message: "Error: Invalid id.",
     });
 });
 
 test("Get parent account invalid id: Numbers", () => {
-    return expect(parents.addChild(1234567,"john", "shahvre", "demo@de.com", "12345678")).rejects.toEqual({
+    return expect(
+        parents.addChild(1234567, "john", "shahvre", "demo@de.com", "12345678")
+    ).rejects.toEqual({
         code: 400,
         message: "Error: Invalid id.",
     });
 });
 
 test("Get parent account invalid id: Object", () => {
-    return expect(parents.addChild({"id":"esrydj34y354ygr"},"john", "shahvre", "demo@de.com", "12345678")).rejects.toEqual({
+    return expect(
+        parents.addChild(
+            { id: "esrydj34y354ygr" },
+            "john",
+            "shahvre",
+            "demo@de.com",
+            "12345678"
+        )
+    ).rejects.toEqual({
         code: 400,
         message: "Error: Invalid id.",
     });

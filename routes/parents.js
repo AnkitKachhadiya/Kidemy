@@ -129,7 +129,7 @@ router.get("/logout", async (request, response) => {
     const parent = request.session.parent;
 
     if (parent) {
-        request.session.destroy();
+        delete request.session.parent;
         request.app.locals.isParentAuthenticated = false;
     }
 
@@ -233,13 +233,13 @@ router.post("/sendVerificationEmail", async (request, response) => {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: process.env.USER,
-                pass: process.env.PASSWORD,
+                user: process.env.USER_GMAIL,
+                pass: process.env.PASSWORD_GMAIL,
             },
         });
 
         const mailOptions = {
-            from: process.env.USER,
+            from: process.env.USER_GMAIL,
             to: parent.email,
             subject: "Kidemy account verification email",
             html: emailTemplate,
@@ -516,6 +516,66 @@ router.post("/editChild", async (request, response) => {
         });
     }
 });
+
+router.post("/assignCourse", async (request, response) => {
+    const requestPostData = request.body;
+
+    const childId = requestPostData.childId;
+    const courseId = requestPostData.courseId;
+
+    const parentId = request.session.parent._id;
+
+    const assignedCourse = await parentsData.assignCourse(
+        parentId,
+        childId,
+        courseId
+    );
+
+    response.json({ isError: false });
+});
+
+router.get("/getNonAssignedChildren/:courseId", async (request, response) => {
+    const courseId = xss(request.params.courseId);
+
+    const parentId = request.session.parent._id;
+
+    const children = await parentsData.getChildren(parentId);
+
+    const nonAssignedChildren = getNonAssignedChildren(
+        courseId,
+        children.children
+    );
+
+    response.json({ children: nonAssignedChildren });
+});
+
+function getNonAssignedChildren(courseId, children) {
+    if (children.length < 1) {
+        return [];
+    }
+
+    const nonAssignedChildren = [];
+
+    for (currentChild of children) {
+        const assignedCourse = currentChild.courses.find(
+            (course) => course._id === courseId
+        );
+
+        if (assignedCourse) {
+            continue;
+        }
+
+        const child = {
+            _id: currentChild._id,
+            firstName: currentChild.firstName,
+            lastName: currentChild.lastName,
+        };
+
+        nonAssignedChildren.push(child);
+    }
+
+    return nonAssignedChildren;
+}
 
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
     throw { code, message };

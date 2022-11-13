@@ -1,0 +1,104 @@
+{{> children-header}}
+<div class="container my-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8">
+                    <input
+                        type="hidden"
+                        id="course-id"
+                        value="{{course._id}}"
+                    />
+                    <h1>{{course.name}}</h1>
+                    <p>{{course.description}}</p>
+                    <p>
+                        Total Modules:
+                        {{courseAnalytics.totalModules}}
+                        <br />
+                        Total Video Lessons:
+                        {{courseAnalytics.totalVideos}}
+                        <br />
+                        Total Quizzes:
+                        {{courseAnalytics.totalQuizzes}}
+                    </p>
+                </div>
+                <div class="col-4">
+                    <img width="380" height="225" src="{{course.imageUrl}}" alt="course" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            {{#each course.modules}}
+                {{#ifeq type "Video"}}
+                    <div>
+                        <h2>{{name}}</h2>
+                        <iframe width="420" height="345" src="{{videoLink}}"></iframe>
+                    </div>
+                    <br/>
+                {{/ifeq}}
+                {{#ifeq type "Quiz"}}
+                    <div>
+                        <h2>Quiz</h2>
+                        <p>{{question}}</p>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="child"
+                                value="A"
+                                id="quiz-{{_id}}-A"
+                            />
+                            <label class="form-check-label" for="quiz-{{_id}}-A">
+                                {{options.A}}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="child"
+                                value="B"
+                                id="quiz-{{_id}}-B"
+                            />
+                            <label class="form-check-label" for="quiz-{{_id}}-B">
+                                {{options.B}}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="child"
+                                value="C"
+                                id="quiz-{{_id}}-C"
+                            />
+                            <label class="form-check-label" for="quiz-{{_id}}-C">
+                                {{options.C}}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="child"
+                                value="D"
+                                id="quiz-{{_id}}-D"
+                            />
+                            <label class="form-check-label" for="quiz-{{_id}}-D">
+                                {{options.D}}
+                            </label>
+                        </div>
+                        <button class="btn btn-primary btn-sm">Submit Answer</button>
+                    </div>
+                    <br/>
+                {{/ifeq}}
+            {{/each}}
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/courses.js"></script>
+{{> children-footer}}

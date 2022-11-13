@@ -1,0 +1,19 @@
+{{> children-header}}
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#each courses}}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{imageUrl}}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                        <h5 class="card-title"><a
+                                href="/children/myCourse/{{_id}}"
+                                class="text-decoration-none"
+                            >{{name}}</a></h5>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+{{> children-footer}}

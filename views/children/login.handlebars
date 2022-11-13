@@ -1,0 +1,62 @@
+{{> children-header}}
+<div class="container d-flex flex-column">
+    <div class="row align-items-center justify-content-center g-0 min-vh-100">
+        <div class="col-lg-5 col-md-8 py-8 py-xl-0">
+            <div class="card shadow">
+                <div class="card-body p-6">
+                    <div class="mb-4">
+                        <h1 class="mb-1 fw-bold">Child sign in</h1>
+                    </div>
+                    <form action="/children/login" method="post" id="login-form" class="needs-validation" novalidate>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email<span class="mandatory">*</span></label>
+                            <input type="email" id="email" class="form-control" name="email"
+                                placeholder="Enter your email address here" required="required"
+                                autocomplete="off" />
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Email is mandatory and it should be in valid format.
+                            </div>
+                        </div>
+
+                        <label for="password" class="form-label">Password<span class="mandatory">*</span></label>
+                        <div class="mb-3 input-group">
+                            <input type="password" id="password" class="form-control" name="password"
+                                placeholder="********" required="required" autocomplete="off" />
+                            <button class="btn btn-outline-secondary show-password" type="button">Show</button>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Password is mandatory.
+                            </div>
+                            <div class="invalid-feedback">
+                                Password should be of at least 8 characters long.
+                            </div>
+                            <div class="invalid-feedback">
+                                Password should have only alphanumeric or special characters and no spaces.
+                            </div>
+                        </div>
+
+                        <p class="text-danger d-none" id="error-message"></p>
+
+                        <div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Sign in</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <p class="mt-4 text-center">Click<a href="/parents" class="ms-1">here</a> to sign in as parent</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+<script src="/public/js/children.js"></script>
+{{> children-footer}}

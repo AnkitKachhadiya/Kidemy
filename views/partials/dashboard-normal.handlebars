@@ -19,43 +19,48 @@
             </div>
         {{/if}}
 
-        <div class="row row-cols-5">
-            {{#each children}}
-                <div class="col">
-                    <div class="card text-center m-2">
-                        <img
-                            src="../../public/images/child.png"
-                            class="card-img-top"
-                            width="100"
-                        />
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>First Name:</strong>
-                                {{firstName}}</li>
-                            <li class="list-group-item"><strong>Last Name:</strong>
-                                {{lastName}}</li>
-                            <li class="list-group-item"><strong>Email:</strong>
-                                {{email}}</li>
-                            <li class="list-group-item"><strong>Courses
-                                    Assigned:</strong>
-                                {{courses.length}}</li>
-                            <li class="list-group-item"><strong>Courses
-                                    Completed:</strong>
-                                0</li>
-                            <li class="list-group-item"><strong>Courses Ongoing:</strong>
-                                0</li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="btn btn-sm btn-primary">View
-                                Progress</a>
-                            <a
-                                href="/parents/editChild/{{_id}}"
-                                class="btn btn-sm btn-secondary"
-                            >Edit</a>
+        <div class="container mt-5">
+            <div class="row row-cols-5">
+                {{#each children}}
+                    <div class="col">
+                        <div class="card text-center m-2">
+                            <img
+                                src="../../public/images/child.png"
+                                class="card-img-top"
+                                width="100"
+                            />
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>First Name:</strong>
+                                    {{firstName}}</li>
+                                <li class="list-group-item"><strong>Last Name:</strong>
+                                    {{lastName}}</li>
+                                <li class="list-group-item"><strong
+                                    >Email:</strong>
+                                    {{email}}</li>
+                                <li class="list-group-item"><strong>Courses
+                                        Assigned:</strong>
+                                    {{courses.length}}</li>
+                                <li class="list-group-item"><strong>Courses
+                                        Completed:</strong>
+                                    0</li>
+                                <li class="list-group-item"><strong>Courses
+                                        Ongoing:</strong>
+                                    0</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-sm btn-primary">View
+                                    Progress</a>
+                                <a
+                                    href="/parents/editChild/{{_id}}"
+                                    class="btn btn-sm btn-secondary"
+                                >Edit</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
+
     </div>
 {{else}}
     <div class="my-5">

@@ -21,8 +21,6 @@ router.get("/", async (request, response) => {
 router.get("/:id", async (request, response) => {
     const course = await coursesData.get(xss(request.params.id));
 
-    console.log(course);
-
     const courseAnalytics = {
         totalVideos: 0,
         totalQuizzes: 0,

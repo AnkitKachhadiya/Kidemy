@@ -4,7 +4,8 @@
     "description": "Learning platform for kids",
     "main": "app.js",
     "scripts": {
-        "test": "jest"
+        "test": "jest",
+        "start": "node app.js"
     },
     "repository": {
         "type": "git",

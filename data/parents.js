@@ -7,6 +7,8 @@ const ErrorCode = require("../helpers/error-code");
 
 const parents = mongoCollections.parents;
 
+const coursesData = require("./courses");
+
 const SALT_ROUNDS = 14;
 
 async function create(_firstName, _lastName, _email, _password) {
@@ -366,6 +368,64 @@ async function updateChild(_parentId, _childId, _firstName, _lastName) {
     }
 }
 
+async function getChildren(_parentId) {
+    try {
+        const parentId = validator.isParentIdValid(xss(_parentId));
+
+        const parentsCollection = await parents();
+
+        const children = await parentsCollection.findOne(
+            { _id: parentId },
+            {
+                projection: {
+                    _id: 1,
+                    children: 1,
+                },
+            }
+        );
+
+        return children;
+    } catch (error) {
+        throwCatchError(error);
+    }
+}
+
+async function assignCourse(parentId, childId, courseId) {
+    const parentsCollection = await parents();
+
+    const course = await coursesData.get(courseId);
+
+    const updatedInfo = await parentsCollection.updateOne(
+        { _id: parentId, "children._id": childId },
+        { $push: { "children.$.courses": course } }
+    );
+}
+
+async function getCoursesBy(_parentId, _childId) {
+    try {
+        const childId = xss(_childId);
+        const parentId = xss(_parentId);
+
+        const parentsCollection = await parents();
+
+        const childData = await parentsCollection.findOne(
+            { _id: parentId, "children._id": childId },
+            {
+                projection: {
+                    _id: 1,
+                    "children.$": 1,
+                },
+            }
+        );
+
+        const [child] = childData.children;
+
+        return child.courses;
+    } catch (error) {
+        throwCatchError(error);
+    }
+}
+
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
     throw { code, message };
 };
@@ -390,4 +450,7 @@ module.exports = {
     updateProfile,
     getChild,
     updateChild,
+    getChildren,
+    assignCourse,
+    getCoursesBy,
 };

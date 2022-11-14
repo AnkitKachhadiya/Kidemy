@@ -35,11 +35,11 @@ npm start
 
 -   Create and add `.env` file in the root directory
 
-    -   Add below lines to that `.env` file and add user own email address for the `USER` and password for the `PASSWORD` field
+    -   Add below lines to that `.env` file and add user own email address for the `USER_GMAIL` and password for the `PASSWORD_GMAIL` field
 
     ```
-    USER=""
-    PASSWORD=""
+    USER_GMAIL=""
+    PASSWORD_GMAIL=""
     ```
 
 -   Go to http://localhost:3000/ in browser to use the web application.

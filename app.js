@@ -21,6 +21,11 @@ const hbs = create({
                 ? options.fn(this)
                 : options.inverse(this);
         },
+        ifneq: function (leftValue, rightValue, options) {
+            return leftValue !== rightValue
+                ? options.fn(this)
+                : options.inverse(this);
+        },
     },
 });
 

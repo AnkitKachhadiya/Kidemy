@@ -426,6 +426,81 @@ async function getCoursesBy(_parentId, _childId) {
     }
 }
 
+async function updateCourseModule(
+    _childId,
+    _moduleId,
+    _courseId,
+    _moduleType,
+    _quizUserAnswer
+) {
+    try {
+        const moduleId = _moduleId;
+        const courseId = xss(_courseId);
+        const moduleType = xss(_moduleType);
+        const quizUserAnswer = xss(_quizUserAnswer);
+        const childId = xss(_childId);
+
+        const parentsCollection = await parents();
+
+        const toBeUpdated = {
+            "children.$[i].courses.$[j].modules.$[k].isModuleCompleted": true,
+        };
+
+        if (moduleType === "quiz") {
+            toBeUpdated["children.$[i].courses.$[j].modules.$[k].userAnswer"] =
+                quizUserAnswer;
+        }
+
+        const updatedInfo = await parentsCollection.updateOne(
+            {
+                "children._id": childId,
+                "children.courses._id": courseId,
+                "children.courses.modules._id": moduleId,
+            },
+            {
+                $set: toBeUpdated,
+            },
+            {
+                arrayFilters: [
+                    { "i._id": childId },
+                    { "j._id": courseId },
+                    { "k._id": moduleId },
+                ],
+            }
+        );
+    } catch (error) {
+        throwCatchError(error);
+    }
+}
+
+async function updateCourse(_childId, _courseId) {
+    try {
+        const childId = xss(_childId);
+        const courseId = xss(_courseId);
+
+        const parentsCollection = await parents();
+
+        const toBeUpdated = {
+            "children.$[i].courses.$[j].isCourseCompleted": true,
+        };
+
+        const updatedInfo = await parentsCollection.updateOne(
+            {
+                "children._id": childId,
+                "children.courses._id": courseId,
+            },
+            {
+                $set: toBeUpdated,
+            },
+            {
+                arrayFilters: [{ "i._id": childId }, { "j._id": courseId }],
+            }
+        );
+    } catch (error) {
+        throwCatchError(error);
+    }
+}
+
 const throwError = (code = 500, message = "Error: Internal Server Error") => {
     throw { code, message };
 };
@@ -453,4 +528,6 @@ module.exports = {
     getChildren,
     assignCourse,
     getCoursesBy,
+    updateCourseModule,
+    updateCourse,
 };

@@ -22,6 +22,8 @@ async function checkChild(_email, _password) {
                 projection: {
                     _id: 1,
                     email: 1,
+                    firstName: 1,
+                    lastName: 1,
                     "children.$": 1,
                 },
             }
@@ -38,6 +40,8 @@ async function checkChild(_email, _password) {
 
         child.parentEmail = childData.email;
         child.parentId = childData._id;
+        child.parentFirstName = childData.firstName;
+        child.parentLastName = childData.lastName;
 
         const isPasswordCorrect = await bcryptjs.compare(
             password,
@@ -55,7 +59,6 @@ async function checkChild(_email, _password) {
 
         return child;
     } catch (error) {
-        console.log(error);
         throwCatchError(error);
     }
 }

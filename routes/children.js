@@ -44,6 +44,8 @@ router.post("/login", async (request, response) => {
         request.session.child = child;
 
         request.app.locals.isChildAuthenticated = true;
+        request.app.locals.firstName = child.firstName;
+        request.app.locals.lastName = child.lastName;
 
         response.json({ isError: false });
     } catch (error) {
@@ -60,6 +62,8 @@ router.get("/logout", async (request, response) => {
     if (child) {
         delete request.session.child;
         request.app.locals.isChildAuthenticated = false;
+        request.app.locals.firstName = undefined;
+        request.app.locals.lastName = undefined;
     }
 
     response.redirect("/children");

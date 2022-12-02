@@ -1,0 +1,58 @@
+<div class="container my-5">
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Child Name:</strong>
+                {{child.firstName}}
+                {{child.lastName}}</p>
+            <p><strong>Child Email:</strong>
+                {{child.email}}</p>
+        </div>
+    </div>
+    <br />
+
+    {{#each courses}}
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h1>{{name}}</h1>
+                        <p>
+                            Total Modules:
+                            {{totalModules}}
+                            <br />
+                            Total Video Lessons:
+                            {{totalVideos}}
+                            <br />
+                            Total Quizzes:
+                            {{totalQuizzes}}
+                            <br />
+                            Total Modules Completed:
+                            {{totalCompleted}}
+                        </p>
+                        Course Progress
+                        <div class="progress">
+                            <div
+                                class="progress-bar {{#if isCourseCompleted}}bg-success{{/if}}"
+                                role="progressbar"
+                                aria-label="Example with label"
+                                style="width: {{progress}}%;"
+                                aria-valuenow="{{progress}}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            >{{progress}}%</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <img
+                            width="380"
+                            height="225"
+                            src="{{imageUrl}}"
+                            alt="course"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    {{/each}}
+</div>

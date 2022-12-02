@@ -1,5 +1,19 @@
 <div class="container mt-5">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="input-group mb-5">
+        <input
+            type="text"
+            class="form-control"
+            placeholder="Search Courses"
+            id="search-input"
+        />
+        <button
+            class="btn btn-primary"
+            type="button"
+            id="search-courses-btn"
+        >Search</button>
+    </div>
+    <p class="text-danger d-none" id="error-message"></p>
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="all-courses-wrapper">
         {{#each courses}}
             <div class="col">
                 <div class="card h-100">
@@ -8,7 +22,7 @@
                         height="250"
                         src="{{imageUrl}}"
                         class="card-img-top"
-                        alt="..."
+                        alt="{{name}}"
                     />
                     <div class="card-body">
                         <h5 class="card-title"><a
@@ -21,3 +35,5 @@
         {{/each}}
     </div>
 </div>
+
+<script src="/public/js/courses.js"></script>

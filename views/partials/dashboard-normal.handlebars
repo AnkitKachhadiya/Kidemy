@@ -20,7 +20,7 @@
         {{/if}}
 
         <div class="container mt-5">
-            <div class="row row-cols-5">
+            <div class="row row-cols-4">
                 {{#each children}}
                     <div class="col">
                         <div class="card text-center m-2">
@@ -40,16 +40,12 @@
                                 <li class="list-group-item"><strong>Courses
                                         Assigned:</strong>
                                     {{courses.length}}</li>
-                                <li class="list-group-item"><strong>Courses
-                                        Completed:</strong>
-                                    0</li>
-                                <li class="list-group-item"><strong>Courses
-                                        Ongoing:</strong>
-                                    0</li>
                             </ul>
                             <div class="card-body">
-                                <a href="#" class="btn btn-sm btn-primary">View
-                                    Progress</a>
+                                <a
+                                    href="/parents/childProgress/{{_id}}"
+                                    class="btn btn-sm btn-primary"
+                                >View Progress</a>
                                 <a
                                     href="/parents/editChild/{{_id}}"
                                     class="btn btn-sm btn-secondary"

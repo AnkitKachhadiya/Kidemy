@@ -1,5 +1,11 @@
 {{> children-header}}
 <div class="container mt-5">
+    {{#unless courses.length}}
+        <div class="text-center">
+            <img src="../../public/images/online-course.png" alt="online course" height="480">
+            <h1 class="mt-2 mb-5">No course has been assigned to you.</h1>
+        </div>
+    {{/unless}}
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {{#each courses}}
             <div class="col">

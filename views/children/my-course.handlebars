@@ -1,14 +1,10 @@
 {{> children-header}}
-<div class="container my-5">
+<div class="container course my-5">
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-8">
-                    <input
-                        type="hidden"
-                        id="course-id"
-                        value="{{course._id}}"
-                    />
+                    <input type="hidden" id="course-id" value="{{course._id}}" />
                     <h1>{{course.name}}</h1>
                     <p>{{course.description}}</p>
                     <p>
@@ -20,7 +16,16 @@
                         <br />
                         Total Quizzes:
                         {{courseAnalytics.totalQuizzes}}
+                        <br />
+                        Total Modules Completed:
+                        {{courseAnalytics.totalCompleted}}
                     </p>
+                    Course Progress
+                    <div class="progress">
+                        <div class="progress-bar {{#if course.isCourseCompleted}}bg-success{{/if}}" role="progressbar" aria-label="Example with label"
+                            style="width: {{courseAnalytics.progress}}%;" aria-valuenow="{{courseAnalytics.progress}}"
+                            aria-valuemin="0" aria-valuemax="100">{{courseAnalytics.progress}}%</div>
+                    </div>
                 </div>
                 <div class="col-4">
                     <img width="380" height="225" src="{{course.imageUrl}}" alt="course" />
@@ -29,75 +34,74 @@
         </div>
     </div>
     <br>
-    <div class="card">
-        <div class="card-body">
-            {{#each course.modules}}
-                {{#ifeq type "Video"}}
-                    <div>
-                        <h2>{{name}}</h2>
-                        <iframe width="420" height="345" src="{{videoLink}}"></iframe>
-                    </div>
-                    <br/>
-                {{/ifeq}}
-                {{#ifeq type "Quiz"}}
-                    <div>
-                        <h2>Quiz</h2>
-                        <p>{{question}}</p>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="child"
-                                value="A"
-                                id="quiz-{{_id}}-A"
-                            />
-                            <label class="form-check-label" for="quiz-{{_id}}-A">
-                                {{options.A}}
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="child"
-                                value="B"
-                                id="quiz-{{_id}}-B"
-                            />
-                            <label class="form-check-label" for="quiz-{{_id}}-B">
-                                {{options.B}}
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="child"
-                                value="C"
-                                id="quiz-{{_id}}-C"
-                            />
-                            <label class="form-check-label" for="quiz-{{_id}}-C">
-                                {{options.C}}
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="child"
-                                value="D"
-                                id="quiz-{{_id}}-D"
-                            />
-                            <label class="form-check-label" for="quiz-{{_id}}-D">
-                                {{options.D}}
-                            </label>
-                        </div>
-                        <button class="btn btn-primary btn-sm">Submit Answer</button>
-                    </div>
-                    <br/>
-                {{/ifeq}}
-            {{/each}}
+
+    {{#each course.modules}}
+    {{#ifeq type "Video"}}
+    <div class="card" id="module-{{_id}}">
+        <div class="card-header text-center">
+            <h2>{{name}}</h2>
+        </div>
+        <div class="card-body text-center">
+            <iframe width="480" height="320" src="{{videoLink}}"></iframe>
+        </div>
+        <div class="card-footer text-end">
+            {{#if isModuleCompleted}}
+            <img src="../../public/images/checkmark.png" alt="check mark" height="30">
+            {{/if}}
+            {{#unless isModuleCompleted}}
+            <button class="btn btn-primary next-module-btn" data-module-id="{{_id}}" data-module-type="video">Next</button>
+            {{/unless}}
         </div>
     </div>
+    <br>
+    {{/ifeq}}
+    {{#ifeq type "Quiz"}}
+    <div class="card" id="module-{{_id}}">
+        <div class="card-header text-center">
+            <h2>Quiz</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{{question}}</strong></p>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="quiz-{{_id}}" value="A" id="quiz-{{_id}}-A" {{#ifeq userAnswer "A"}}checked{{/ifeq}}/>
+                <label class="form-check-label" for="quiz-{{_id}}-A">
+                    {{options.A}}
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="quiz-{{_id}}" value="B" id="quiz-{{_id}}-B" {{#ifeq userAnswer "B"}}checked{{/ifeq}}/>
+                <label class="form-check-label" for="quiz-{{_id}}-B">
+                    {{options.B}}
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="quiz-{{_id}}" value="C" id="quiz-{{_id}}-C" {{#ifeq userAnswer "C"}}checked{{/ifeq}}/>
+                <label class="form-check-label" for="quiz-{{_id}}-C">
+                    {{options.C}}
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="quiz-{{_id}}" value="D" id="quiz-{{_id}}-D" {{#ifeq userAnswer "D"}}checked{{/ifeq}}/>
+                <label class="form-check-label" for="quiz-{{_id}}-D">
+                    {{options.D}}
+                </label>
+            </div>
+        </div>
+
+        <div class="card-footer text-end">
+            {{#if isModuleCompleted}}
+            {{#ifneq userAnswer answer}}<span class="text-danger">Incorrect Answer</span>{{/ifneq}}
+            {{#ifeq userAnswer answer}}<span class="text-success">Correct Answer</span>{{/ifeq}}
+            <img src="../../public/images/checkmark.png" alt="check mark" height="30">
+            {{/if}}
+            {{#ifneq userAnswer answer}}
+            <button class="btn btn-primary next-module-btn" data-module-id="{{_id}}" data-module-type="quiz" data-module-a="{{answer}}">Submit &  Go To Next</button>
+            {{/ifneq}}
+        </div>
+    </div>
+    <br>
+    {{/ifeq}}
+    {{/each}}
 </div>
 
 <script src="/public/js/courses.js"></script>

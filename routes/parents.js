@@ -139,7 +139,7 @@ router.get("/logout", async (request, response) => {
 //dashboard view
 router.get("/dashboard", async (request, response) => {
     if (!request.session.parent) {
-        return response.redirect("/");
+        return response.redirect("/parents");
     }
 
     const parent = await parentsData.get(request.session.parent._id);
@@ -223,7 +223,7 @@ router.post("/sendVerificationEmail", async (request, response) => {
         }
 
         const emailTemplate = `
-        Hi <strong>${parent.firstName} ${parent.lastName}</strong>,
+        Hello <strong>${parent.firstName} ${parent.lastName}</strong>,
         <br>
         <p>We're happy you signed up for Kidemy. To start exploring the Kidemy, please confirm your email address.</p>
         <a href="http://localhost:3000/parents/verifyEmail/${parent._id}&${parent.verificationToken}" target="_blank">Verify Email</a>
@@ -518,6 +518,10 @@ router.post("/editChild", async (request, response) => {
 });
 
 router.post("/assignCourse", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/parents");
+    }
+
     const requestPostData = request.body;
 
     const childId = requestPostData.childId;
@@ -532,9 +536,15 @@ router.post("/assignCourse", async (request, response) => {
     );
 
     response.json({ isError: false });
+
+    request.app.locals.assignCourse = "Course has been assigned successfully.";
 });
 
 router.get("/getNonAssignedChildren/:courseId", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/parents");
+    }
+
     const courseId = xss(request.params.courseId);
 
     const parentId = request.session.parent._id;
@@ -575,6 +585,86 @@ function getNonAssignedChildren(courseId, children) {
     }
 
     return nonAssignedChildren;
+}
+
+router.get("/childProgress/:childId", async (request, response) => {
+    if (!request.session.parent) {
+        return response.redirect("/parents");
+    }
+
+    try {
+        const childId = validator.isChildIdValid(xss(request.params.childId));
+
+        const child = await parentsData.getChild(
+            request.session.parent._id,
+            childId
+        );
+
+        if (!child) {
+            request.app.locals.editChildError = "Child not found.";
+            return response.redirect("/parents/dashboard");
+        }
+
+        const coursesAnalytics = getCourseAnalytics(child.courses);
+
+        response.render("parents/child-progress", {
+            pageTitle: "Child Progress",
+            child: {
+                email: child.email,
+                firstName: child.firstName,
+                lastName: child.lastName,
+            },
+            courses: coursesAnalytics,
+        });
+    } catch (error) {
+        request.app.locals.editChildError =
+            error.message || "Internal server error";
+
+        return response.redirect("/parents/dashboard");
+    }
+});
+
+function getCourseAnalytics(courses) {
+    if (courses.length < 1) {
+        return [];
+    }
+
+    const coursesAnalytics = [];
+
+    for (const currentCourse of courses) {
+        const course = {
+            name: currentCourse.name,
+            imageUrl: currentCourse.imageUrl,
+            totalVideos: 0,
+            totalQuizzes: 0,
+            totalCompleted: 0,
+            progress: 0,
+            totalModules: currentCourse.modules.length,
+            isCourseCompleted: currentCourse.isCourseCompleted,
+        };
+
+        for (const currentModule of currentCourse.modules) {
+            if (currentModule.type === "Video") {
+                course.totalVideos++;
+            }
+
+            if (currentModule.type === "Quiz") {
+                course.totalQuizzes++;
+            }
+
+            if (currentModule.isModuleCompleted === true) {
+                course.totalCompleted++;
+            }
+        }
+
+        course.progress = Math.round(
+            (100 * course.totalCompleted) / course.totalModules
+        );
+
+        coursesAnalytics.push(course);
+    }
+
+    return coursesAnalytics;
 }
 
 const throwError = (code = 500, message = "Error: Internal Server Error") => {

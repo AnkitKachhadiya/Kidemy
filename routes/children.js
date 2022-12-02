@@ -83,11 +83,19 @@ router.get("/dashboard", async (request, response) => {
 });
 
 router.get("/myCourse/:id", async (request, response) => {
-    const course = await coursesData.get(xss(request.params.id));
+    if (!request.session.child) {
+        return response.redirect("/children");
+    }
+
+    const courseId = xss(request.params.id);
+    const childId = request.session.child._id;
+    const course = await coursesData.getProgress(childId, courseId);
 
     const courseAnalytics = {
         totalVideos: 0,
         totalQuizzes: 0,
+        totalCompleted: 0,
+        progress: 0,
     };
 
     for (const currentModule of course.modules) {
@@ -98,11 +106,17 @@ router.get("/myCourse/:id", async (request, response) => {
         if (currentModule.type === "Quiz") {
             courseAnalytics.totalQuizzes++;
         }
+
+        if (currentModule.isModuleCompleted === true) {
+            courseAnalytics.totalCompleted++;
+        }
     }
 
     courseAnalytics.totalModules = course.modules.length;
 
-    console.log(course);
+    courseAnalytics.progress = Math.round(
+        (100 * courseAnalytics.totalCompleted) / courseAnalytics.totalModules
+    );
 
     response.render("children/my-course", {
         layout: false,

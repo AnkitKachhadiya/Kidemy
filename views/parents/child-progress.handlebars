@@ -55,4 +55,7 @@
         </div>
         <br />
     {{/each}}
+    {{#unless courses.length}}
+        <h3 class="text-center">No courses has been assigned to {{child.firstName}} {{child.lastName}}.</h3>
+    {{/unless}}
 </div>

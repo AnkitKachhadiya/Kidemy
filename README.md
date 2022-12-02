@@ -36,10 +36,14 @@ npm start
 -   Create and add `.env` file in the root directory
 
     -   Add below lines to that `.env` file and add user own email address for the `USER_GMAIL` and password for the `PASSWORD_GMAIL` field
+    -   Add your own MongoDB connection url of atlas or your local MongoDB server url for `MONGODB_CONNECTION_LINK`
+    -   Add MongoDB database name for `MONGODB_DATABASE`
 
     ```
     USER_GMAIL=""
     PASSWORD_GMAIL=""
+    MONGODB_CONNECTION_LINK=""
+    MONGODB_DATABASE=""
     ```
 
 -   Go to http://localhost:3000/ in browser to use the web application.

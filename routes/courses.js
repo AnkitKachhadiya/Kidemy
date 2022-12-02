@@ -16,6 +16,10 @@ router.get("/", async (request, response) => {
         return response.redirect("/parents");
     }
 
+    if (!request.session.parent.isVerified) {
+        return response.redirect("/parents/dashboard");
+    }
+
     const courses = await coursesData.getAllCourses();
 
     response.render("courses/all", {
@@ -27,6 +31,10 @@ router.get("/", async (request, response) => {
 router.get("/:id", async (request, response) => {
     if (!request.session.parent) {
         return response.redirect("/parents");
+    }
+
+    if (!request.session.parent.isVerified) {
+        return response.redirect("/parents/dashboard");
     }
 
     const course = await coursesData.get(xss(request.params.id));

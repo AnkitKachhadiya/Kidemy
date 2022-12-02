@@ -186,6 +186,10 @@ router.get(
                 );
             }
 
+            if (request.session.parent) {
+                request.session.parent.isVerified = true;
+            }
+
             response.render("parents/email-verification", {
                 pageTitle: "Email Verification",
                 isError: false,
@@ -267,6 +271,10 @@ router.get("/addChild", async (request, response) => {
         return response.redirect("/");
     }
 
+    if (!request.session.parent.isVerified) {
+        return response.redirect("/parents/dashboard");
+    }
+
     response.render("parents/addChild", {
         pageTitle: "Add Child",
     });
@@ -275,6 +283,10 @@ router.get("/addChild", async (request, response) => {
 router.post("/addChild", async (request, response) => {
     if (!request.session.parent) {
         return response.redirect("/");
+    }
+
+    if (!request.session.parent.isVerified) {
+        return response.redirect("/parents/dashboard");
     }
 
     try {

@@ -29,6 +29,9 @@ cd Fantastic-Five
 npm install
 
 npm start
+
+// for performing unit testing
+npm test
 ```
 
 ## Instructions

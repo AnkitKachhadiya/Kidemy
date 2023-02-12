@@ -22,7 +22,7 @@ mkdir myfolder
 
 cd myfolder
 
-git clone https://github.com/AnkitKachhadiya/Fantastic-Five.git
+git clone https://github.com/AnkitKachhadiya/Kidemy.git
 
 cd Fantastic-Five
 
